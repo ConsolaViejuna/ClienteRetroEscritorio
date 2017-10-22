@@ -10,6 +10,8 @@ import json
 import urllib
 import httplib
 
+import clienteretro.types as types
+
 _DEFAULT_URL_ = 'http://clienteretro.consolaviejuna.com/controlador'
 
 # La API REST utiliza varios controladores, aqui definimos todos por defecto
@@ -159,12 +161,12 @@ class Client(object):
             # Busqueda por ID
             for system in self.systems_data:
                 if system['id'] == system_id:
-                    return system
+                    return types.System(system)
         elif system_id in self.systems_names:
             # Busqueda por NOMBRE
             for system in self.systems_data:
                 if system['nombre'] == system_id:
-                    return system
+                    return types.System(system)
         else:
             raise ObjectNotFound('System %s' % system_id)
 
@@ -192,12 +194,12 @@ class Client(object):
             # Busqueda por ID
             for developer in self.developers_data:
                 if developer['identificador'] == developer_id:
-                    return developer
+                    return types.Developer(developer)
         elif developer_id in self.developers_names:
             # Busqueda por NOMBRE
             for developer in self.developers_data:
                 if developer['nombre'] == developer_id:
-                    return developer
+                    return types.Developer(developer)
         raise ObjectNotFound('Developer %s' % developer_id)
         
     @property
@@ -232,12 +234,12 @@ class Client(object):
             # Busqueda por ID
             for genre in self.genres_data:
                 if genre['id'] == genre_id:
-                    return genre
+                    return types.Genre(genre)
         elif genre_id in self.genre_names:
             # Busqueda por NOMBRE
             for genre in self.genres_data:
                 if genre['nombre'] == genre_id:
-                    return genre
+                    return types.Genre(genre)
         else:
             raise ObjectNotFound('Genre %s' % genre_id)
 
@@ -255,20 +257,4 @@ class Client(object):
                 urllib.urlencode({'accion': 'cargarPorId',
                                   'id': developer_id}), 'games')
             self.__games_data[developer_id] = json.loads(result)
-        return self.__games_data[developer_id]
-
-
-# Unos pocos tests quick'n'dirty
-if __name__ == '__main__':
-    import pprint
-    cliente_retro = Client()
-    print cliente_retro.systems_names
-    print cliente_retro.systems_ids
-    print cliente_retro.genre_ids
-    pprint.pprint(cliente_retro.get_genre('3'), indent=2)
-    print cliente_retro.get_system('7')
-    print cliente_retro.developers_names
-    print cliente_retro.developers_ids
-    pprint.pprint(cliente_retro.get_developer('mojontwins'), indent=2)
-    for game in cliente_retro.get_games_of('mojontwins'):
-        pprint.pprint(game, indent=2)
+        return [types.Game(data) for data in self.__games_data[developer_id]]
