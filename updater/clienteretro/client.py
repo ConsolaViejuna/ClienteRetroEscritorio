@@ -230,12 +230,12 @@ class Client(object):
         '''
         if genre_id in self.genre_ids:
             # Busqueda por ID
-            for genre in self.genre_data:
+            for genre in self.genres_data:
                 if genre['id'] == genre_id:
                     return genre
         elif genre_id in self.genre_names:
             # Busqueda por NOMBRE
-            for genre in self.genre_data:
+            for genre in self.genres_data:
                 if genre['nombre'] == genre_id:
                     return genre
         else:
@@ -260,11 +260,15 @@ class Client(object):
 
 # Unos pocos tests quick'n'dirty
 if __name__ == '__main__':
+    import pprint
     cliente_retro = Client()
     print cliente_retro.systems_names
     print cliente_retro.systems_ids
+    print cliente_retro.genre_ids
+    pprint.pprint(cliente_retro.get_genre('3'), indent=2)
     print cliente_retro.get_system('7')
     print cliente_retro.developers_names
     print cliente_retro.developers_ids
-    print cliente_retro.get_developer('mojontwins')
-    print cliente_retro.get_games_of('mojontwins')
+    pprint.pprint(cliente_retro.get_developer('mojontwins'), indent=2)
+    for game in cliente_retro.get_games_of('mojontwins'):
+        pprint.pprint(game, indent=2)
