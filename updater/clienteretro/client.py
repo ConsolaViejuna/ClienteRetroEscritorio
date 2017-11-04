@@ -67,7 +67,7 @@ def _split_url_(url):
         address = ''
     return (host, address)
 
-
+        
 class ObjectNotFound(Exception):
     def __init__(self, element='unknown'):
         self.__element = element
@@ -161,12 +161,12 @@ class Client(object):
             # Busqueda por ID
             for system in self.systems_data:
                 if system['id'] == system_id:
-                    return types.System(system)
+                    return types.Sistema(system)
         elif system_id in self.systems_names:
             # Busqueda por NOMBRE
             for system in self.systems_data:
                 if system['nombre'] == system_id:
-                    return types.System(system)
+                    return types.Sistema(system)
         else:
             raise ObjectNotFound('System %s' % system_id)
 
@@ -194,12 +194,12 @@ class Client(object):
             # Busqueda por ID
             for developer in self.developers_data:
                 if developer['identificador'] == developer_id:
-                    return types.Developer(developer)
+                    return types.Programador(developer)
         elif developer_id in self.developers_names:
             # Busqueda por NOMBRE
             for developer in self.developers_data:
                 if developer['nombre'] == developer_id:
-                    return types.Developer(developer)
+                    return types.Programador(developer)
         raise ObjectNotFound('Developer %s' % developer_id)
         
     @property
@@ -234,12 +234,12 @@ class Client(object):
             # Busqueda por ID
             for genre in self.genres_data:
                 if genre['id'] == genre_id:
-                    return types.Genre(genre)
+                    return types.Genero(genre)
         elif genre_id in self.genre_names:
             # Busqueda por NOMBRE
             for genre in self.genres_data:
                 if genre['nombre'] == genre_id:
-                    return types.Genre(genre)
+                    return types.Genero(genre)
         else:
             raise ObjectNotFound('Genre %s' % genre_id)
 
@@ -257,4 +257,4 @@ class Client(object):
                 urllib.urlencode({'accion': 'cargarPorId',
                                   'id': developer_id}), 'games')
             self.__games_data[developer_id] = json.loads(result)
-        return [types.Game(data) for data in self.__games_data[developer_id]]
+        return [types.Juego(data) for data in self.__games_data[developer_id]]
